@@ -1,0 +1,17 @@
+steps:
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'functions'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['test']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+  - name: 'gcr.io/xwing-recorder/firebase'
+    args: ['deploy', '--debug']
+    secretEnv: ['FIREBASE_TOKEN']
+secrets:
+  - kmsKeyName: 'projects/xwing-recorder/locations/global/keyRings/cloudbuilder/cryptoKeys/firebase-token'
+    secretEnv:
+      FIREBASE_TOKEN: 'CiQAcpLzKKgXoF3ZeaClXvSRuQ38+dZfTkN4MOamuk4KxwcZDaoSkQEAZGe0owQ4EZ/jmawdU/+IVb2ap1bY4d8kc/hu3oEdp+Sh2r7MtFdzX5zYVRj79rruaSKA62orq6EGzdPalNO0XMwM1nV6kM2t7GYT8Q2YWqvwZZvNeESHFYYq6Lq77r0IqkuPyGMW3JAKSnparynSNzxGuOeGIohhYswTtzHXqONJMiR6nhyxWA83Bk41lUck'
