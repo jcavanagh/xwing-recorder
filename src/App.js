@@ -1,14 +1,16 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import AppStateProvider from './app/state';
+import Lobby from './lobby';
+import Container from 'react-bootstrap/Container';
 
 function App() {
   return (
-    <Container>
-      Hello Cleveland!
-    </Container>
+    <AppStateProvider>
+      <Container fluid={true}>
+        <Lobby />
+      </Container>
+    </AppStateProvider>
   );
 }
 
