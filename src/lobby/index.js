@@ -42,7 +42,7 @@ function CreateGameModal({ createGame }) {
   const [isPrivate, setIsPrivate] = useState(true);
 
   const handleCreate = () => {
-    const ref = createGame({
+    createGame({
       name,
       isPrivate
     });

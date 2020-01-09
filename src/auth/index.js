@@ -14,10 +14,10 @@ export function Login() {
 
   return (
     <>
-      <a className="btn btn-block btn-social btn-google" onClick={handleLoginGoogle} href="javascript:void(0)">
+      <button className="btn btn-block btn-social btn-google" onClick={handleLoginGoogle}>
         <span className="fa fa-google"></span>
         Sign in with Google
-      </a>
+      </button>
     </>
   );
 }

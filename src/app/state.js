@@ -19,11 +19,6 @@ const authProviders = {
           token: result.credential.accessToken
         }
       }).catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-
         // TODO: Handle errors
       });
     }
@@ -39,7 +34,7 @@ export default function(props) {
   // State hooks
   const [user, userLoading, userError] = useAuthState(firebase.auth());
   const [users, usersLoading, usersError] = useListVals(presenceRef);
-  const [connected, connectedLoading, connectedError] = useObjectVal(firebase.database().ref('.info/connected'));
+  const [connected] = useObjectVal(firebase.database().ref('.info/connected'));
   const [games, gamesLoading, gamesError] = useList(gamesRef);
 
   // Record presence if we are logged in
@@ -55,7 +50,7 @@ export default function(props) {
         presenceRef.child(user.uid).onDisconnect().remove();
       })
     }
-  }, [user]);
+  }, [user]); // eslint-disable-line 
 
   // Logout stuff
   const logout = function() {
