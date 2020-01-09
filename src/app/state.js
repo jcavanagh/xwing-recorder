@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import firebase from 'firebase/app';
 import uuidv4 from 'uuid/v4';
 
@@ -38,27 +38,32 @@ export default function(props) {
 
   // State hooks
   const [user, userLoading, userError] = useAuthState(firebase.auth());
-  const [users, usersLoading, usersError] = useObjectVal(presenceRef);
+  const [users, usersLoading, usersError] = useListVals(presenceRef);
   const [connected, connectedLoading, connectedError] = useObjectVal(firebase.database().ref('.info/connected'));
   const [games, gamesLoading, gamesError] = useList(gamesRef);
 
   // Record presence if we are logged in
-  if(user && !connectedLoading) {
-    presenceRef.update({
-      [user.uid]: {
-        connected,
-        uid: user.uid,
-        displayName: user.displayName,
-        photoURL: user.photoURL
-      }
-    });
-  }
+  useEffect(() => {
+    if(user) {
+      presenceRef.update({
+        [user.uid]: {
+          uid: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL
+        }
+      }).then(() => {
+        presenceRef.child(user.uid).onDisconnect().remove();
+      })
+    }
+  }, [user]);
 
+  // Logout stuff
   const logout = function() {
-    firebase.auth().signOut().then(function() {
-      presenceRef.delete()
-    }).catch(function(error) {
-      // An error happened.
+    presenceRef.child(user.uid).remove().then(() => {
+      return firebase.auth().signOut().catch(function(error) {
+        // TODO: Error handling
+        console.error(error);
+      });
     });
   };
 
