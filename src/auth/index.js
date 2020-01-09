@@ -6,7 +6,8 @@ import { AppContext } from '../app/state';
 
 export function Login() {
   const state = useContext(AppContext);
-
+  if (state.user.value) return null;
+    
   const handleLoginGoogle = () => {
     state.user.login('google');
   }
@@ -23,7 +24,8 @@ export function Login() {
 
 export function Logout() {
   const state = useContext(AppContext);
-
+  if (state.user.value == null) return null;
+  
   const handleLogout = () => {
     state.user.logout();
   }
