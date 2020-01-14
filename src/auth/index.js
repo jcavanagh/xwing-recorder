@@ -4,27 +4,34 @@ import Button from 'react-bootstrap/Button';
 
 import { AppContext } from '../app/state';
 
-export function Login() {
+export function LoginLogout() {
   const state = useContext(AppContext);
-  if (state.user.value) return null;
-    
+
+  if(state.user.loading) return null;
+  const loggedIn = !!state.user.value;
+
+  return loggedIn ? <Logout /> : <Login />;
+}
+
+function Login() {
+  const state = useContext(AppContext);
+
   const handleLoginGoogle = () => {
     state.user.login('google');
   }
 
   return (
     <>
-      <button className="btn btn-block btn-social btn-google" onClick={handleLoginGoogle}>
-        <span className="fa fa-google"></span>
+      <button className='btn btn-block btn-social btn-google' onClick={handleLoginGoogle}>
+        <span className='fa fa-google'></span>
         Sign in with Google
       </button>
     </>
   );
 }
 
-export function Logout() {
+function Logout() {
   const state = useContext(AppContext);
-  if (state.user.value == null) return null;
   
   const handleLogout = () => {
     state.user.logout();

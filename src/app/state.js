@@ -30,12 +30,14 @@ export default function(props) {
   // Firebase refs
   const gamesRef = firebase.database().ref('games');
   const presenceRef = firebase.database().ref('presence');
+  const lobbyChatRef = firebase.database().ref('lobby/chat');
 
   // State hooks
   const [user, userLoading, userError] = useAuthState(firebase.auth());
   const [users, usersLoading, usersError] = useListVals(presenceRef);
   const [connected] = useObjectVal(firebase.database().ref('.info/connected'));
   const [games, gamesLoading, gamesError] = useList(gamesRef);
+  const [lobbyChat, lobbyChatLoading, lobbyChatError] = useListVals(lobbyChatRef);
 
   // Record presence if we are logged in
   useEffect(() => {
@@ -52,16 +54,6 @@ export default function(props) {
     }
   }, [user]); // eslint-disable-line 
 
-  // Logout stuff
-  const logout = function() {
-    presenceRef.child(user.uid).remove().then(() => {
-      return firebase.auth().signOut().catch(function(error) {
-        // TODO: Error handling
-        console.error(error);
-      });
-    });
-  };
-
   return (
     <AppContext.Provider value={{
       user: {
@@ -73,18 +65,46 @@ export default function(props) {
           authProviders[provider].login();
         },
         logout: () => {
-          logout();
+          presenceRef.child(user.uid).remove().then(() => {
+            return firebase.auth().signOut().catch(function(error) {
+              // TODO: Error handling
+              console.error(error);
+            });
+          });
         },
       },
       users: {
-        value: users && Object.entries(users).reduce((all, [k, v]) => {
+        list: users && Object.entries(users).reduce((all, [k, v]) => {
           all.push(v);
           return all;
         }, []),
+        byUserId: users && Object.entries(users).reduce((all, [k, v]) => {
+          all[v.uid] = v;
+          return all
+        }, {}),
+        value: users,
         loading: usersLoading,
         error: usersError
       },
       connected,
+      lobby: {
+        chat: {
+          value: lobbyChat,
+          loading: lobbyChatLoading,
+          error: lobbyChatError,
+
+          send: (message) => {
+            if(user) {
+              const newMsgRef = lobbyChatRef.push();
+              newMsgRef.update({
+                userId: user.uid,
+                timestamp: Date.now(),
+                message
+              });
+            }
+          }
+        }
+      },
       games: {
         value: games?.values() ?? [],
         loading: gamesLoading,

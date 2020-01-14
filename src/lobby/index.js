@@ -6,25 +6,22 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Media from 'react-bootstrap/Media';
 import Modal from 'react-bootstrap/Modal';
+import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 
 import { AppContext } from '../app/state';
+
+import { Chat } from '../chat';
+import { UserImage } from '../user';
 
 function UserWidget({ user }) {
   if(!user) { return null; }
 
   return (
     <Media style={{ border: '1px solid #CCC', borderRadius: '5px', background: '#EEE' }}>
-      <img
-        width={32}
-        height={32}
-        className="mr-3"
-        src={user.photoURL}
-        alt={user.displayName}
-        style={{ borderRadius: '5px' }}
-      />
+      <UserImage user={user} />
       <Media.Body>
-        <span className="align-middle">{user.displayName}</span>
+        <span className='align-middle'>{user.displayName}</span>
       </Media.Body>
     </Media>
   );
@@ -107,12 +104,12 @@ function GameList({ games }) {
   );
 }
 
-function UserList({ users }) {
-  if(!users || !users.value) { return null; }
+function UsersList({ users }) {
+  if(!users || !users.list) { return null; }
 
   return (
     <>
-      {users.value.map(user => 
+      {users.list.map(user =>
         <div key={user.uid}>
           <UserWidget user={user} />
         </div>
@@ -121,19 +118,57 @@ function UserList({ users }) {
   );
 }
 
-// A realtime game lobby
-// Create, join, or view a list of games here
-export default function Lobby() {
+function GamesPanel() {
+  const state = useContext(AppContext);
+  return (
+    <Navbar bg='light' variant='light'>
+      <Navbar.Brand>Games</Navbar.Brand>
+      <Navbar.Collapse />
+      <Form inline onSubmit={e => e.preventDefault()}>
+        <CreateGameModal createGame={state.games.create}/>
+      </Form>
+    </Navbar>
+  )
+}
+
+function UsersPanel() {
   const state = useContext(AppContext);
 
   return (
-    <Container fluid={true}>
-      <Row>
+    <>
+      <Navbar bg='light' variant='light'>
+        <Navbar.Brand>Online Users</Navbar.Brand>
+      </Navbar>
+      <UsersList users={state.users} />
+    </>
+  );
+}
+
+function ChatPanel() {
+  return (
+    <div style={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
+      <Navbar bg='light' variant='light'>
+        <Navbar.Brand>Lobby Chat</Navbar.Brand>
+      </Navbar>
+      <Chat style={{ paddingTop: '56px' }}/>
+    </div>
+  );
+}
+
+// A realtime game lobby
+// Create, join, or view a list of games here
+export default function Lobby() {
+  return (
+    <Container fluid={true} style={{ height: '100%', paddingTop: '70px', paddingBottom: '15px' }}>
+      <Row style={{ height: '100%' }}>
         <Col>
-          <UserWidget />
-          <CreateGameModal createGame={state.games.create}/>
-          <GameList games={state.games} />
-          <UserList users={state.users} />
+          <GamesPanel />
+        </Col>
+        <Col xs={4}>
+          <ChatPanel />
+        </Col>
+        <Col xs={2}>
+          <UsersPanel />
         </Col>
       </Row>
     </Container>
