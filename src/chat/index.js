@@ -29,10 +29,10 @@ function ChatWidget({ user, timestamp, message }) {
 }
 
 function ChatMessages({ messages, users }) {
-  const msgEls = messages.map(m => {
+  const msgEls = messages.map((m, idx) => {
     const user = users[m.userId] ?? {};
     return (
-      <ChatWidget user={user} timestamp={m.timestamp} message={m.message} />
+      <ChatWidget key={idx} user={user} timestamp={m.timestamp} message={m.message} />
     );
   });
 
