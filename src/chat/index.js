@@ -8,31 +8,30 @@ import Media from 'react-bootstrap/Media';
 import { AppContext } from '../app/state';
 import { UserImage } from '../user';
 
-function ChatWidget({ user, timestamp, message }) {
-  if(!user) { return null; }
+function ChatWidget({ messageRecord: mr }) {
+  if(!mr) { return null; }
 
-  timestamp = new Date(timestamp);
+  const timestamp = new Date(mr.timestamp);
   const displayDate = timestamp ? `${timestamp.getHours()}:${timestamp.getMinutes()}` : ''
 
   return (
     <Media style={{ border: '1px solid #CCC', borderRadius: '5px', background: '#EEE' }}>
-      <UserImage user={user} width={48} height={48} />
+      <UserImage displayName={mr.displayName} photoUrl={mr.photoUrl} width={48} height={48} />
       <Media.Body>
         <div>
-          <span className='align-middle'>{user.displayName}</span>&nbsp;
+          <span className='align-middle'>{mr.displayName}</span>&nbsp;
           <span className='align-middle' style={{ color: '#AAA' }}>{displayDate}</span>
         </div>
-        <div>{message}</div>
+        <div>{mr.message}</div>
       </Media.Body>
     </Media>
   );
 }
 
-function ChatMessages({ messages, users }) {
+function ChatMessages({ messages }) {
   const msgEls = messages.map((m, idx) => {
-    const user = users[m.userId] ?? {};
     return (
-      <ChatWidget key={idx} user={user} timestamp={m.timestamp} message={m.message} />
+      <ChatWidget key={idx} messageRecord={m} />
     );
   });
 
@@ -84,7 +83,7 @@ export function Chat({ gameId }) {
 
   return (
     <div style={{ display: 'flex', flexFlow: 'column', flex: 1 }}>
-      <ChatMessages messages={messages} users={state.users.byUserId} />
+      <ChatMessages messages={messages} />
       <ChatInput />
     </div>
   )

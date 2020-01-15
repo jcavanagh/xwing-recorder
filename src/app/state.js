@@ -99,7 +99,9 @@ export default function(props) {
               newMsgRef.update({
                 userId: user.uid,
                 timestamp: Date.now(),
-                message
+                message,
+                photoUrl: user.photoURL,
+                displayName: user.displayName
               });
             }
           }
