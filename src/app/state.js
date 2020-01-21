@@ -135,6 +135,7 @@ export default function(props) {
             [id]: {
               id,
               name,
+              timestamp: Date.now(),
               maxPlayers,
               isPrivate
             }

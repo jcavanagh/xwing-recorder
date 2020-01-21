@@ -109,31 +109,33 @@ function CreateGameModal({ createGame }) {
   );
 }
 
-function GameList({ games }) {
+function GameListItem({ game }) {
   const [hoverRef, isHovered] = useHover();
 
   const background = isHovered ? '#EEE' : 'none';
   const cursor = isHovered ? 'pointer': 'default';
 
-  return games?.map(game => {
-    const playerCount = Object.keys(game.players ?? {}).length;
+  const playerCount = Object.keys(game.players ?? {}).length;
 
-    return (
-      <Row
-        ref={hoverRef}
-        key={game.id}
-        noGutters
-        style={{ padding: '15px', border: '1px solid #CCC', borderRadius: '5px', background, cursor }}
-        onClick={() => navigate(`/game/${game.id}`)}>
-        <Col xs={8}>
-          <span >{game.name}</span>
-        </Col>
-        <Col xs={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          Players: {playerCount}/{game.maxPlayers}
-        </Col>
-      </Row>
-    );
-  }) ?? null;
+  return (
+    <Row
+      ref={hoverRef}
+      key={game.id}
+      noGutters
+      style={{ padding: '15px', border: '1px solid #CCC', borderRadius: '5px', background, cursor }}
+      onClick={() => navigate(`/game/${game.id}`)}>
+      <Col xs={8}>
+        <span >{game.name}</span>
+      </Col>
+      <Col xs={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        Players: {playerCount}/{game.maxPlayers}
+      </Col>
+    </Row>
+  );
+}
+
+function GameList({ games }) {
+  return games?.map(game => <GameListItem game={game} />) ?? null;
 }
 
 function UsersList({ users }) {
