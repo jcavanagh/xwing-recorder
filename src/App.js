@@ -2,10 +2,12 @@ import React from 'react';
 
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
+import { Router, Link } from '@reach/router';
 
 import AppStateProvider from './app/state';
 
 import { LoginLogout } from './auth';
+import Game from './game';
 import Lobby from './lobby';
 
 function AppNav() {
@@ -24,7 +26,10 @@ function App() {
   return (
     <AppStateProvider>
       <AppNav />
-      <Lobby />
+      <Router>
+        <Lobby path='/' />
+        <Game path='game/:gameId' />
+      </Router>
     </AppStateProvider>
   );
 }

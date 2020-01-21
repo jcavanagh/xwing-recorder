@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { navigate } from '@reach/router';
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -10,6 +11,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 
 import { AppContext } from '../app/state';
+import { useHover } from '../util/hooks';
 
 import { Chat } from '../chat';
 import { UserImage } from '../user';
@@ -28,6 +30,8 @@ function UserWidget({ user }) {
 }
 
 function CreateGameModal({ createGame }) {
+  const { user } = useContext(AppContext);
+
   // Modal state
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -35,23 +39,30 @@ function CreateGameModal({ createGame }) {
 
   // Form state
   const [name, setName] = useState('');
-  const [players, setPlayers] = useState(2);
+  const [maxPlayers, setMaxPlayers] = useState(2);
   const [isPrivate, setIsPrivate] = useState(true);
 
   const handleCreate = () => {
-    createGame({
+    const gameId = createGame({
       name,
+      maxPlayers,
       isPrivate
     });
 
-    // TODO: Creation loading UX, close modal when done, then route to game UI
+    setShow(false);
+    navigate(`/game/${gameId}`);
   }
 
   return (
     <>
-      <Button variant='primary' onClick={handleShow}>
-        New Game
-      </Button>
+      {user?.value?.uid ?
+        <Button variant='primary' onClick={handleShow}>
+          New Game
+        </Button> :
+        <Button variant='primary' disabled>
+          Login to Create a Game
+        </Button>
+      }
 
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
@@ -72,9 +83,9 @@ function CreateGameModal({ createGame }) {
             <Form.Group>
               <Form.Control
                 type='text'
-                placeholder='Players'
-                value={players}
-                onChange={e => setPlayers(e.target.value)}
+                placeholder='Max Players'
+                value={maxPlayers}
+                onChange={e => setMaxPlayers(e.target.value)}
               />
             </Form.Group>
 
@@ -99,9 +110,28 @@ function CreateGameModal({ createGame }) {
 }
 
 function GameList({ games }) {
-  return (
-    <div></div>
-  );
+  const [hoverRef, isHovered] = useHover();
+
+  const background = isHovered ? '#EEE' : 'none';
+  const cursor = isHovered ? 'pointer': 'default';
+
+  return games?.map(game => {
+    return (
+      <Row
+        ref={hoverRef}
+        key={game.id}
+        noGutters
+        style={{ padding: '15px', border: '1px solid #CCC', borderRadius: '5px', background, cursor }}
+        onClick={() => navigate(`/game/${game.id}`)}>
+        <Col xs={8}>
+          <span >{game.name}</span>
+        </Col>
+        <Col xs={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          Players: {game.players?.length ?? 0}/{game.maxPlayers}
+        </Col>
+      </Row>
+    );
+  }) ?? null;
 }
 
 function UsersList({ users }) {
@@ -120,15 +150,19 @@ function UsersList({ users }) {
 
 function GamesPanel() {
   const state = useContext(AppContext);
+
   return (
-    <Navbar bg='light' variant='light'>
-      <Navbar.Brand>Games</Navbar.Brand>
-      <Navbar.Collapse />
-      <Form inline onSubmit={e => e.preventDefault()}>
-        <CreateGameModal createGame={state.games.create}/>
-      </Form>
-    </Navbar>
-  )
+    <div style={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
+      <Navbar bg='light' variant='light'>
+        <Navbar.Brand>Games</Navbar.Brand>
+        <Navbar.Collapse />
+        <Form inline onSubmit={e => e.preventDefault()}>
+          <CreateGameModal createGame={state.games.create}/>
+        </Form>
+      </Navbar>
+      <GameList games={state.games.value} />
+    </div>
+  );
 }
 
 function UsersPanel() {

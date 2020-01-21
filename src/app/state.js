@@ -25,6 +25,12 @@ const authProviders = {
   }
 }
 
+// Local state blob
+// This could probably be something a little more full-featured in the future
+const local = {
+  
+};
+
 // A provider component for our application state, which injects context data via Firebase pub/sub
 export default function(props) {
   // Firebase refs
@@ -36,7 +42,7 @@ export default function(props) {
   const [user, userLoading, userError] = useAuthState(firebase.auth());
   const [users, usersLoading, usersError] = useListVals(presenceRef);
   const [connected] = useObjectVal(firebase.database().ref('.info/connected'));
-  const [games, gamesLoading, gamesError] = useList(gamesRef);
+  const [games, gamesLoading, gamesError] = useListVals(gamesRef);
   const [lobbyChat, lobbyChatLoading, lobbyChatError] = useListVals(lobbyChatRef);
 
   // Record presence if we are logged in
@@ -108,24 +114,29 @@ export default function(props) {
         }
       },
       games: {
-        value: games?.values() ?? [],
+        value: games ?? [],
         loading: gamesLoading,
         error: gamesError,
 
-        create: ({ name, players, isPrivate }) => {
+        create: ({ name, maxPlayers, isPrivate }) => {
+          // Generate an ID, return that
           const id = uuidv4();
-          console.log(`Create game: id=${id}, name=${name}, players=${players}, private=${isPrivate}`)
+          console.log(`Create game: id=${id}, name=${name}, maxPlayers=${maxPlayers}, private=${isPrivate}`)
           gamesRef.update({
             [id]: {
               id,
               name,
-              players,
+              maxPlayers,
               isPrivate,
               owner: user?.uid ?? null
             }
           });
+
+          return id;
         }
-      }
+      },
+      // Separate bucket for local-only state
+      local
     }}>
       {props.children}
     </AppContext.Provider>
