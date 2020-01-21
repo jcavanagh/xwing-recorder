@@ -1,6 +1,6 @@
 [submodule "xwing-data2"]
 	path = xwing-data2
-	url = git@github.com:guidokessels/xwing-data2.git
+	url = https://github.com/guidokessels/xwing-data2
 [submodule "xws-spec"]
 	path = xws-spec
 	url = https://github.com/elistevens/xws-spec
