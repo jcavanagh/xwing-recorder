@@ -1,18 +1,43 @@
-import axios from 'axios';
+import firebase from 'firebase/app';
 
 import { Squad } from './model';
 
-async function importXWS(xws) {
-  // We'll use XWS for all our internal reckoning
-  return new Squad(xws);
+// 3KB max squad size
+const MAX_SIZE = 3 * 1024;
+
+function parseJSON(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return null;
+  }
 }
 
-async function importYASB(rawYasbUrl) {
-  // The YASB serialization format relies on IDs only in YASB, so it's fragile to implement standalone
-  // For our usage, we can use https://github.com/zacharyp/yasb-xws
-  // If that's dead or bad, people can just export XWS from YASB
-  const converterService = 'https://yasb2-xws.herokuapp.com';
-  const yasbUrl = new URL(yasbUrl)
-  const xws = await axios.get(`${converterService}${yasbUrl.search}`);
-  return new Squad(xws);
+// Should be parsed by the time it gets here
+function makeSquad(xwsObj) {
+  if(!xwsObj) {
+    throw Error('No squad data received');
+  }
+
+  if(JSON.stringify(xwsObj).length > MAX_SIZE) {
+    throw Error(`Squad size cannot exceed ${MAX_SIZE} bytes`);
+  }
+
+  return new Squad(xwsObj);
+}
+
+export async function importXWS(xws) {
+  // We'll use XWS for all our internal reckoning
+  const parsed = parseJSON(xws);
+  if(parsed) {
+    return makeSquad(parsed);
+  } else {
+    throw new Error('Squad was not JSON');
+  }
+}
+
+export async function importYASB(rawYasbUrl) {
+  const importFn = firebase.functions().httpsCallable('importYASB');
+  const xws = await importFn({ url: rawYasbUrl });
+  return makeSquad(xws?.data);
 }

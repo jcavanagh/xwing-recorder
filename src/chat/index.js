@@ -16,7 +16,7 @@ function ChatWidget({ messageRecord: mr }) {
 
   return (
     <Media style={{ border: '1px solid #CCC', borderRadius: '5px', background: '#EEE' }}>
-      <UserImage displayName={mr.displayName} photoUrl={mr.photoUrl} width={48} height={48} />
+      <UserImage displayName={mr.displayName} photoURL={mr.photoURL} width={48} height={48} />
       <Media.Body>
         <div>
           <span className='align-middle'>{mr.displayName}</span>&nbsp;

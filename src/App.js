@@ -13,7 +13,7 @@ import Lobby from './lobby';
 function AppNav() {
   return (
     <Navbar fixed='top' bg='dark' variant='dark' expand='lg'>
-      <Navbar.Brand href='#'>X-Wing Recorder</Navbar.Brand>
+      <Navbar.Brand href='/'>X-Wing Recorder</Navbar.Brand>
       <Navbar.Collapse id='basic-navbar-nav' />
       <Form inline onSubmit={e => e.preventDefault()}>
         <LoginLogout />
@@ -26,7 +26,7 @@ function App() {
   return (
     <AppStateProvider>
       <AppNav />
-      <Router>
+      <Router style={{ height: '100%' }}>
         <Lobby path='/' />
         <Game path='game/:gameId' />
       </Router>

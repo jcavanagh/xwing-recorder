@@ -45,6 +45,15 @@ export default function(props) {
   const [games, gamesLoading, gamesError] = useListVals(gamesRef);
   const [lobbyChat, lobbyChatLoading, lobbyChatError] = useListVals(lobbyChatRef);
 
+  // Extracted state mutators
+  const joinGame = (id) => {
+    gamesRef.child(id).child('players').child(user.uid).child('user').update({
+      uid: user.uid,
+      photoURL: user.photoURL,
+      displayName: user.displayName
+    });
+  };
+
   // Record presence if we are logged in
   useEffect(() => {
     if(user) {
@@ -103,10 +112,10 @@ export default function(props) {
             if(user) {
               const newMsgRef = lobbyChatRef.push();
               newMsgRef.update({
-                userId: user.uid,
+                uid: user.uid,
                 timestamp: Date.now(),
                 message,
-                photoUrl: user.photoURL,
+                photoURL: user.photoURL,
                 displayName: user.displayName
               });
             }
@@ -127,12 +136,34 @@ export default function(props) {
               id,
               name,
               maxPlayers,
-              isPrivate,
-              owner: user?.uid ?? null
+              isPrivate
             }
+          }).then(() => {
+            // The creator auto-joins their own game
+            joinGame(id);
           });
 
           return id;
+        },
+
+        start: (id) => {
+          gamesRef.child(id).update({
+            isStarted: true
+          });
+        },
+
+        join: joinGame,
+
+        leave: (id) => {
+          gamesRef.child(id).child('players').child(user.uid).remove();
+
+          // TODO: Destroy the game if it has no players left
+        },
+
+        updateSquad(id, squad) {
+          gamesRef.child(id).child('players').child(user.uid).update({
+            squad
+          });
         }
       },
       // Separate bucket for local-only state

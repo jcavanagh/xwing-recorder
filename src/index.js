@@ -11,6 +11,7 @@ import 'firebase/analytics';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
+import 'firebase/functions';
 
 import App from './App';
 

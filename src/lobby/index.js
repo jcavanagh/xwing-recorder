@@ -116,6 +116,8 @@ function GameList({ games }) {
   const cursor = isHovered ? 'pointer': 'default';
 
   return games?.map(game => {
+    const playerCount = Object.keys(game.players ?? {}).length;
+
     return (
       <Row
         ref={hoverRef}
@@ -127,7 +129,7 @@ function GameList({ games }) {
           <span >{game.name}</span>
         </Col>
         <Col xs={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          Players: {game.players?.length ?? 0}/{game.maxPlayers}
+          Players: {playerCount}/{game.maxPlayers}
         </Col>
       </Row>
     );
