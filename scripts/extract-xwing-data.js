@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { lstatSync, readdirSync, readFileSync } = require('fs-extra');
 const { basename, join, extname } = require('path');
 const { get, map, set } = require('lodash');
@@ -52,8 +53,29 @@ const rollup = (data, path = [], depth = 0) => {
       //Write the entire file as the folder key value
       set(data, scope, jsonFiles[0].file);
     } else {
-      for (const { path, file } of jsonFiles) {
-        const name = file.name || basename(path, extname(path));
+      for (let { path, file } of jsonFiles) {
+        const name = file.xws || file.name || basename(path, extname(path));
+
+        // Flatten some things by XWS ID so we can use direct paths instead of having lists to index
+
+        // Flatten ship-pilots
+        if(Array.isArray(file.pilots)) {
+          file.pilots = file.pilots.reduce((all, pilot) => {
+            const key = pilot.xws || pilot.name;
+            all[key] = pilot;
+            return all;
+          }, {})
+        }
+
+        // Flatten upgrades
+        if(path.includes('/upgrades/') && Array.isArray(file)) {
+          file = file.reduce((all, upgrade) => {
+            const key = upgrade.xws || upgrade.name;
+            all[key] = upgrade;
+            return all;
+          }, {})
+        }
+
         set(data, [...scope, name], file);
       }
     }

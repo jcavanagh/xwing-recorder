@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
+import get from 'lodash/get';
 
 import { Button, Col, Container, Form, InputGroup, Modal, Navbar, Row, Spinner, Media } from 'react-bootstrap';
 
 import { importYASB, importXWS } from '../app/import';
 import { AppContext } from '../app/state';
+import data from '../data';
+import { XWSTooltip } from '../squad';
 import { UserImage } from '../user';
 
 function GameStatus() {
@@ -145,6 +148,53 @@ function PreGamePlayerPanel({ game, player }) {
     }
   }
 
+  function renderSquadDetail() {
+    if(!player.squad) {
+      return null;
+    }
+
+    return (
+      <>
+        <hr />
+        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+          <div style={{ minWidth: '150px' }}>
+            {player.squad.pilots?.map((pilot, index) => {
+              // Render each pilot
+              const pilotPath = `ships.${pilot.ship}.pilots.${pilot.id}`;
+              const pilotXwsData = get(data, pilotPath);
+              if(!pilotXwsData) { return null; }
+
+              // Collect all upgrades as list items
+              let upgrades = [];
+              pilot.upgrades && Object.entries(pilot.upgrades).forEach(([upgradeType, upgradesOfType], index) => {
+                // XWS stores upgrades as type -> list of upgrades of that type
+                upgradesOfType && upgradesOfType.forEach((upgrade, subIndex) => {
+                  const upgradePath = `upgrades.${upgradeType}.${upgrade}`;
+                  const upgradeXwsData = get(data, upgradePath);
+                  if(upgradeXwsData) {
+                    upgrades.push(
+                      <li key={`upgrade-${index}-${subIndex}`}>
+                        <XWSTooltip xwsPath={upgradePath}>{upgradeXwsData.name} ({upgradeXwsData.cost?.value})</XWSTooltip>
+                      </li>
+                    );
+                  }
+                })
+              });
+
+              // Render the pilot and the upgrades list
+              return (
+                <React.Fragment key={`pilot-${index}`}>
+                  <XWSTooltip xwsPath={pilotPath}>{pilotXwsData.name} ({pilotXwsData.cost})</XWSTooltip>
+                  <ul>{upgrades}</ul>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <Media>
       <UserImage user={player.user} width={64} height={64} />
@@ -155,6 +205,7 @@ function PreGamePlayerPanel({ game, player }) {
           <div className='align-middle'>Faction: {player.squad?.faction}</div>
           <div className='align-middle'>Points: {player.squad?.points}</div>
         </div>
+        {renderSquadDetail()} 
       </Media.Body>
       {renderSquadUpload()}
     </Media>
