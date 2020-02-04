@@ -44,21 +44,107 @@ const bearingOrder = [
     "D"
 ]
 
+// https://github.com/raithos/xwing/blob/master/coffeescripts/xwing.coffee#L1854
 const bearingSvg = {
-    "T": '',
-    "B": '',
-    "F": '',
-    "N": '',
-    "Y": '',
-    "K": '',
-    "L": '',
-    "S": '',
-    "E": '',
-    "R": '',
-    "O": '',
-    "A": '',
-    "P": '',
-    "D": ''
+    "T": {
+        line: "M160,180 L160,70 80,70",
+        triangle: "M80,100 V40 L30,70 Z",
+        transform: null
+    },
+    "B": {
+        line: "M150,180 S150,120 80,60",
+        triangle: "M80,100 V40 L30,70 Z",
+        transform: "translate(-5 -15) rotate(45 70 90)"
+    },
+    "F": {
+        line: "M100,180 L100,100 100,80",
+        triangle: "M70,80 H130 L100,30 Z",
+        transform: ''
+    },
+    "N": {
+        line: "M50,180 S50,120 120,60",
+        triangle: "M120,100 V40 L170,70 Z",
+        transform: "translate(5 -15) rotate(-45 130 90)"
+    },
+    "Y": {
+        line:  "M40,180 L40,70 120,70",
+        triangle: "M120,100 V40 L170,70 Z",
+        transform: null
+    },
+    "K": {
+        line: 'M50,180 L50,100 C50,10 140,10 140,100 L140,120',
+        triangle: 'M170,120 H110 L140,180 Z',
+        transform: null
+    },
+    "L": {
+        line: 'M150,180 S150,120 80,60',
+        triangle: 'M80,100 V40 L30,70 Z',
+        transform: "translate(0 50)"
+    },
+    "S": {
+        line: 'M50,180 S50,120 120,60',
+        triangle: 'M120,100 V40 L170,70 Z',
+        transform: "translate(0 50)"
+    },
+    "E": {
+        line: 'M160,180 L160,70 80,70',
+        triangle: 'M60,100 H100 L80,140 Z',
+        transform: null
+    },
+    "R": {
+        line: 'M40,180 L40,70 120,70',
+        triangle: 'M100,100 H140 L120,140 Z',
+        transform: null
+    },
+    "O": {
+        element: maneuver => {}
+    },
+    "A": {
+        line: 'M50,180 S50,120 120,60',
+        triangle: 'M120,100 V40 L170,70 Z',
+        transform: "translate(5 -15) rotate(-45 130 90)"
+    },
+    "P": {
+        line: 'M100,180 L100,100 100,80',
+        triangle: 'M70,80 H130 L100,30 Z',
+        transform: null
+    },
+    "D": {
+        line: 'M150,180 S150,120 80,60',
+        triangle: 'M80,100 V40 L30,70 Z',
+        transform: "translate(-5 -15) rotate(45 70 90)"
+    }
+}
+
+function renderManeuverSvg(maneuver) {
+    const bsvg = bearingSvg[maneuver.bearing];
+
+    if(!bsvg.line) return null
+
+    const difficultyStyles = {
+        'R': 'red',
+        'B': 'blue',
+        'W': 'white'
+    }
+
+    const color = difficultyStyles[maneuver.difficulty];
+    const outline = 'black';
+
+    const svgInner = bsvg.element ? bsvg.element(maneuver): (
+        <>
+            <path className='svg-maneuver-outer #{maneuverClass} #{maneuverClass2}' strokeWidth='25' fill='none' stroke={outline} d={bsvg.line} />
+            <path className='svg-maneuver-triangle #{maneuverClass} #{maneuverClass2}' d={bsvg.triangle} fill={color} strokeWidth='5' stroke={outline} transform={bsvg.transform} />
+            <path className='svg-maneuver-inner #{maneuverClass} #{maneuverClass2}' strokeWidth='15' fill='none' stroke={color} d={bsvg.line} />
+        </>
+    )
+
+    return (
+        <svg width='30px' height='30px' viewBox='0 0 200 200'>
+            <g>
+                {svgInner}
+            </g>
+        </svg>
+    )
 }
 
 function parseXwsManeuvers(xwsManeuvers) {
@@ -159,17 +245,10 @@ class MDial extends React.Component {
         const buttonSize = '35px'
         const border = '1px solid';
         const display = 'flex';
-        const difficultyStyles = {
-            'R': 'red',
-            'B': 'blue',
-            'W': 'black'
-        }
 
         if(maneuverData) {
             // Actual button
-            const fontColor = difficultyStyles[maneuverData.difficulty];
             const style = {
-                color: fontColor,
                 height: buttonSize,
                 width: buttonSize,
                 border,
@@ -179,9 +258,11 @@ class MDial extends React.Component {
                 alignItems: 'center'
             }
 
+            const content = renderManeuverSvg(maneuverData)
+
             return (
                 <div key={maneuverData.xws} onClick={this.props.onClick} style={style}>
-                    <span>{maneuverData.speed}{maneuverData.bearing}</span>
+                    <span>{content}</span>
                 </div>
             );
         }
