@@ -44,6 +44,23 @@ const bearingOrder = [
     "D"
 ]
 
+const bearingSvg = {
+    "T": '',
+    "B": '',
+    "F": '',
+    "N": '',
+    "Y": '',
+    "K": '',
+    "L": '',
+    "S": '',
+    "E": '',
+    "R": '',
+    "O": '',
+    "A": '',
+    "P": '',
+    "D": ''
+}
+
 function parseXwsManeuvers(xwsManeuvers) {
     return xwsManeuvers.map(xwsm => {
         return {
@@ -139,11 +156,8 @@ class MDial extends React.Component {
     // }
 
     renderButton(maneuverData) {
-        // Roughing out styles so I can see what it looks like
-        const buttonSize = '35px';
+        const buttonSize = '35px'
         const border = '1px solid';
-        // Render each as inline, so they don't wrap
-        // Their container should define the lines
         const display = 'flex';
         const difficultyStyles = {
             'R': 'red',
@@ -154,9 +168,20 @@ class MDial extends React.Component {
         if(maneuverData) {
             // Actual button
             const fontColor = difficultyStyles[maneuverData.difficulty];
+            const style = {
+                color: fontColor,
+                height: buttonSize,
+                width: buttonSize,
+                border,
+                display,
+                alignContent: 'center',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }
+
             return (
-                <div key={maneuverData.xws} onClick={this.props.onClick} style={{ color: fontColor, height: buttonSize, width: buttonSize, border, display }}>
-                    {maneuverData.speed}{maneuverData.bearing}
+                <div key={maneuverData.xws} onClick={this.props.onClick} style={style}>
+                    <span>{maneuverData.speed}{maneuverData.bearing}</span>
                 </div>
             );
         }
