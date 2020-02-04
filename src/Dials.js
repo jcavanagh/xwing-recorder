@@ -99,7 +99,7 @@ const bearingSvg = {
     },
     "O": {
         element: (maneuver, color) => {
-            return <rect x="50" y="50" width="100" height="100" style={`fill:${color}`} />
+            return <rect x='50' y='50' width='100' height='100' style={{ fill: color }} />
         }
     },
     "A": {
@@ -121,8 +121,6 @@ const bearingSvg = {
 
 function renderManeuverSvg(maneuver) {
     const bsvg = bearingSvg[maneuver.bearing];
-
-    if(!bsvg.line) return null
 
     const difficultyStyles = {
         'R': 'red',
