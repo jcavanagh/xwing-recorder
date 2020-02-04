@@ -6,6 +6,7 @@ import range from 'lodash/range';
 
 // this is a maneuver button, e.g., 1 straight, 2  turn, 3 bank, 4-k etc..
 const test_dial = [
+    "0OR",
     "1BB",
     "1FB",
     "1NB",
@@ -97,7 +98,9 @@ const bearingSvg = {
         transform: null
     },
     "O": {
-        element: maneuver => {}
+        element: (maneuver, color) => {
+            return <rect x="50" y="50" width="100" height="100" style={`fill:${color}`} />
+        }
     },
     "A": {
         line: 'M50,180 S50,120 120,60',
@@ -130,11 +133,11 @@ function renderManeuverSvg(maneuver) {
     const color = difficultyStyles[maneuver.difficulty];
     const outline = 'black';
 
-    const svgInner = bsvg.element ? bsvg.element(maneuver): (
+    const svgInner = bsvg.element ? bsvg.element(maneuver, color) : (
         <>
-            <path className='svg-maneuver-outer #{maneuverClass} #{maneuverClass2}' strokeWidth='25' fill='none' stroke={outline} d={bsvg.line} />
-            <path className='svg-maneuver-triangle #{maneuverClass} #{maneuverClass2}' d={bsvg.triangle} fill={color} strokeWidth='5' stroke={outline} transform={bsvg.transform} />
-            <path className='svg-maneuver-inner #{maneuverClass} #{maneuverClass2}' strokeWidth='15' fill='none' stroke={color} d={bsvg.line} />
+            <path strokeWidth='25' fill='none' stroke={outline} d={bsvg.line} />
+            <path d={bsvg.triangle} fill={color} strokeWidth='5' stroke={outline} transform={bsvg.transform} />
+            <path strokeWidth='15' fill='none' stroke={color} d={bsvg.line} />
         </>
     )
 
@@ -258,11 +261,9 @@ class MDial extends React.Component {
                 alignItems: 'center'
             }
 
-            const content = renderManeuverSvg(maneuverData)
-
             return (
                 <div key={maneuverData.xws} onClick={this.props.onClick} style={style}>
-                    <span>{content}</span>
+                    <span>{renderManeuverSvg(maneuverData)}</span>
                 </div>
             );
         }
