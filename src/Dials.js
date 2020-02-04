@@ -1,6 +1,82 @@
 import React from 'react';
 
 // this is a maneuver button, e.g., 1 straight, 2  turn, 3 bank, 4-k etc..
+const test_dial = [
+    "1BB",
+    "1FB",
+    "1NB",
+    "2TW",
+    "2BB",
+    "2FB",
+    "2NB",
+    "2YW",
+    "3ER",
+    "3TW",
+    "3BW",
+    "3FB",
+    "3NW",
+    "3YW",
+    "3RR",
+    "4FW",
+    "4KR"
+]
+
+// order of columns of bearings which  should appear if they  exist.
+const bearing_order = [
+    "T",
+    "B",
+    "F",
+    "N",
+    "Y",
+    "K",
+    "L",
+    "S",
+    "E",
+    "R",
+    "O",
+    "A",
+    "P",
+    "D"
+]
+
+// to be used with var unique = a.filter(onlyUnique) where a is an array
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
+// returns an  array of all  the unique bearings as they exist in an order defined by bearing_order
+function getMBearings(maneuver_list) {
+    var bearing_order = [
+      "T", 
+      "B",
+      "F",
+      "N",
+      "Y",
+      "K",
+      "L",
+      "S",
+      "E",
+      "R",
+      "O",
+      "A",
+      "P",
+      "D"
+		]
+    
+    var bearings = maneuver_list.map(x => x[1]).filter(onlyUnique);
+ 		var inbearings = function(x) {
+        return bearings.includes(x)
+    }
+    var bearings_list = bearing_order.filter(inbearings);
+    return bearings_list;
+}
+
+// returns an array of all the unique speeds
+function getMSpeeds(maneuver_list) {
+    var speeds = maneuver_list.map(x => x[0]).filter(onlyUnique);
+    return speeds
+}
+
 
 function MButton(props) {
     return (
@@ -38,6 +114,9 @@ class MDial extends React.Component {
                     {this.renderMButton(2)}
                     {this.renderMButton(3)}
                     {this.renderMButton(4)}
+                </div>
+                <div>
+                    haiyou blah
                 </div>
             </div>
         </>
