@@ -1,0 +1,23 @@
+steps:
+  - name: gcr.io/cloud-builders/git
+    entrypoint: /bin/bash
+    args:
+    - -exc
+    - |
+      git clone 'https://github.com/jcavanagh/xwing-recorder.git' tmp
+      mv tmp/.git .git
+      rm -rf tmp
+      git reset --hard "${COMMIT_SHA:-HEAD}"
+      rm -rf xwing-data2
+      rm -rf xws-spec
+      git submodule sync --recursive
+      git submodule update --init --recursive
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'functions'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['test']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
