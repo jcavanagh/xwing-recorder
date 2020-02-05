@@ -243,9 +243,15 @@ class MDial extends React.Component {
     // }
 
     renderButton(maneuverData) {
-        const buttonSize = '35px'
+        const buttonSize = '35px';
         const border = '1px solid';
         const display = 'flex';
+        // added so I could debug
+        var mymdata = maneuverData;
+        // console.log(mymdata);
+        // console.log(maneuverData)
+        console.log(typeof(maneuverData))
+        console.log(maneuverData)
 
         if(maneuverData) {
             // Actual button
@@ -258,9 +264,9 @@ class MDial extends React.Component {
                 justifyContent: 'center',
                 alignItems: 'center'
             }
-
+            console.log(maneuverData.xws)
             return (
-                <div key={maneuverData.xws} onClick={this.props.onClick} style={style}>
+                <div key={maneuverData.xws} onClick={() => this.props.onClick(maneuverData.xws)} style={style}>
                     <span>{renderManeuverSvg(maneuverData)}</span>
                 </div>
             );
@@ -320,11 +326,19 @@ export class MDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            setmaneuver: null
+            setmaneuver: "default maneuver"
         }
     }
 
     handleClick(i) {
+        // this.setState({
+        //     setmaneuver: i
+        // })
+
+
+        // this.state.setmaneuver = i;
+        // return i
+        
         this.setState({
             setmaneuver: i
         })
@@ -340,7 +354,7 @@ export class MDashboard extends React.Component {
                         maneuvers={maneuvers}
                         onClick={(i) => this.handleClick(i)}
                     />
-                    
+                    {/* <p>hello</p> */}
                 </div>
                 <div className="test1">
                     <p>{this.state.setmaneuver}</p>
