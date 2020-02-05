@@ -13,37 +13,21 @@ function GameStatus() {
   const state = useContext(AppContext);
 
   // Player names + factions, time left, total points destroyed, etc
-  return (
-    <Row>
-      
-    </Row>
-  );
+  return <Row></Row>;
 }
 
-function SquadPanel() {
+function SquadPanel() {}
 
-}
+function PlanningPhasePanel() {}
 
-function PlanningPhasePanel() {
+function SystemPhasePanel() {}
 
-}
+function ActivationPhasePanel() {}
 
-function SystemPhasePanel() {
-
-}
-
-function ActivationPhasePanel() {
-
-}
-
-function EngagementPhasePanel() {
-
-}
+function EngagementPhasePanel() {}
 
 function InGamePanel() {
-  return (
-    <GameStatus />
-  );
+  return <GameStatus />;
 }
 
 function SquadImportModal({ game }) {
@@ -62,20 +46,20 @@ function SquadImportModal({ game }) {
   const [yasb, setYasb] = useState();
   const [xws, setXws] = useState();
 
-  const handleImport = async (type) => {
+  const handleImport = async type => {
     let squad;
     try {
-      if(type === 'xws') {
-        squad = await importXWS(xws)
-      } else if(type === 'yasb') {
+      if (type === 'xws') {
+        squad = await importXWS(xws);
+      } else if (type === 'yasb') {
         squad = await importYASB(yasb);
       }
-    } catch(e) {
+    } catch (e) {
       //TODO: Import error UX
       console.error(e);
     }
 
-    if(squad) {
+    if (squad) {
       state.games.updateSquad(game.id, squad.xws);
       handleClose();
     }
@@ -83,7 +67,7 @@ function SquadImportModal({ game }) {
 
   return (
     <>
-      <Button variant='primary' onClick={handleShow}>
+      <Button variant="primary" onClick={handleShow}>
         {squadMsg}
       </Button>
 
@@ -97,13 +81,15 @@ function SquadImportModal({ game }) {
             <Form.Group>
               <InputGroup>
                 <Form.Control
-                  type='text'
-                  placeholder='Paste YASB link'
+                  type="text"
+                  placeholder="Paste YASB link"
                   value={yasb}
                   onChange={e => setYasb(e.target.value)}
                 />
                 <InputGroup.Append>
-                  <Button variant='primary' onClick={handleImport.bind(null, 'yasb')}>Import YASB</Button>
+                  <Button variant="primary" onClick={handleImport.bind(null, 'yasb')}>
+                    Import YASB
+                  </Button>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>
@@ -111,13 +97,15 @@ function SquadImportModal({ game }) {
             <Form.Group>
               <InputGroup>
                 <Form.Control
-                  type='text'
-                  placeholder='Paste XWS JSON'
+                  type="text"
+                  placeholder="Paste XWS JSON"
                   value={xws}
                   onChange={e => setXws(e.target.value)}
                 />
                 <InputGroup.Append>
-                  <Button variant='primary' onClick={handleImport.bind(null, 'xws')}>Import XWS</Button>
+                  <Button variant="primary" onClick={handleImport.bind(null, 'xws')}>
+                    Import XWS
+                  </Button>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>
@@ -125,7 +113,9 @@ function SquadImportModal({ game }) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant='secondary' onClick={handleClose}>Close</Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
@@ -139,17 +129,17 @@ function PreGamePlayerPanel({ game, player }) {
   const isCurrentUser = player.user.uid === user?.uid;
 
   function renderSquadUpload() {
-    if(isCurrentUser) {
+    if (isCurrentUser) {
       return <SquadImportModal game={game} player={player} />;
     }
 
-    if(player.squad) {
+    if (player.squad) {
       return <span>Squad Imported</span>;
     }
   }
 
   function renderSquadDetail() {
-    if(!player.squad) {
+    if (!player.squad) {
       return null;
     }
 
@@ -162,29 +152,37 @@ function PreGamePlayerPanel({ game, player }) {
               // Render each pilot
               const pilotPath = `ships.${pilot.ship}.pilots.${pilot.id}`;
               const pilotXwsData = get(data, pilotPath);
-              if(!pilotXwsData) { return null; }
+              if (!pilotXwsData) {
+                return null;
+              }
 
               // Collect all upgrades as list items
               let upgrades = [];
-              pilot.upgrades && Object.entries(pilot.upgrades).forEach(([upgradeType, upgradesOfType], index) => {
-                // XWS stores upgrades as type -> list of upgrades of that type
-                upgradesOfType && upgradesOfType.forEach((upgrade, subIndex) => {
-                  const upgradePath = `upgrades.${upgradeType}.${upgrade}`;
-                  const upgradeXwsData = get(data, upgradePath);
-                  if(upgradeXwsData) {
-                    upgrades.push(
-                      <li key={`upgrade-${index}-${subIndex}`}>
-                        <XWSTooltip xwsPath={upgradePath}>{upgradeXwsData.name} ({upgradeXwsData.cost?.value})</XWSTooltip>
-                      </li>
-                    );
-                  }
-                })
-              });
+              pilot.upgrades &&
+                Object.entries(pilot.upgrades).forEach(([upgradeType, upgradesOfType], index) => {
+                  // XWS stores upgrades as type -> list of upgrades of that type
+                  upgradesOfType &&
+                    upgradesOfType.forEach((upgrade, subIndex) => {
+                      const upgradePath = `upgrades.${upgradeType}.${upgrade}`;
+                      const upgradeXwsData = get(data, upgradePath);
+                      if (upgradeXwsData) {
+                        upgrades.push(
+                          <li key={`upgrade-${index}-${subIndex}`}>
+                            <XWSTooltip xwsPath={upgradePath}>
+                              {upgradeXwsData.name} ({upgradeXwsData.cost?.value})
+                            </XWSTooltip>
+                          </li>
+                        );
+                      }
+                    });
+                });
 
               // Render the pilot and the upgrades list
               return (
                 <React.Fragment key={`pilot-${index}`}>
-                  <XWSTooltip xwsPath={pilotPath}>{pilotXwsData.name} ({pilotXwsData.cost})</XWSTooltip>
+                  <XWSTooltip xwsPath={pilotPath}>
+                    {pilotXwsData.name} ({pilotXwsData.cost})
+                  </XWSTooltip>
                   <ul>{upgrades}</ul>
                 </React.Fragment>
               );
@@ -200,12 +198,12 @@ function PreGamePlayerPanel({ game, player }) {
       <UserImage user={player.user} width={64} height={64} />
       <Media.Body>
         <div>
-          <div className='align-middle'>{player.user.displayName}</div>
-          <div className='align-middle'>Name: {player.squad?.name ?? 'Unnamed Squadron'}</div>
-          <div className='align-middle'>Faction: {player.squad?.faction}</div>
-          <div className='align-middle'>Points: {player.squad?.points}</div>
+          <div className="align-middle">{player.user.displayName}</div>
+          <div className="align-middle">Name: {player.squad?.name ?? 'Unnamed Squadron'}</div>
+          <div className="align-middle">Faction: {player.squad?.faction}</div>
+          <div className="align-middle">Points: {player.squad?.points}</div>
         </div>
-        {renderSquadDetail()} 
+        {renderSquadDetail()}
       </Media.Body>
       {renderSquadUpload()}
     </Media>
@@ -225,35 +223,35 @@ function PreGamePanel({ game }) {
   }
 
   function startGame() {
-    if(canStart()) {
+    if (canStart()) {
       state.games.start(game.id);
     }
   }
 
   return (
     <div style={{ display: 'flex', flex: 1, flexFlow: 'column', height: '100%' }}>
-      <Navbar bg='light' variant='light'>
+      <Navbar bg="light" variant="light">
         <Navbar.Brand>{game.name}</Navbar.Brand>
         <Navbar.Collapse />
         <Form inline onSubmit={e => e.preventDefault()}>
-          <Button onClick={startGame} disabled={!canStart()}>Start Game</Button>
+          <Button onClick={startGame} disabled={!canStart()}>
+            Start Game
+          </Button>
         </Form>
       </Navbar>
       <Container fluid style={{ paddingTop: '10px' }}>
         <Row style={{ height: '100%' }}>
-          <Col xs='6'>
-            <Navbar bg='light' variant='light'>
+          <Col xs="6">
+            <Navbar bg="light" variant="light">
               <Navbar.Brand>Players</Navbar.Brand>
               <Navbar.Collapse />
               <Navbar.Brand>{`${players?.length ?? 0}/${game.maxPlayers}`}</Navbar.Brand>
             </Navbar>
             {players.map(([playerId, player]) => {
-              return <PreGamePlayerPanel key={playerId} game={game} player={player} />
+              return <PreGamePlayerPanel key={playerId} game={game} player={player} />;
             })}
           </Col>
-          <Col>
-            { /* TODO: Squad summary on player select */ }
-          </Col>
+          <Col>{/* TODO: Squad summary on player select */}</Col>
         </Row>
       </Container>
     </div>
@@ -267,11 +265,13 @@ export default function({ gameId }) {
   const game = state.games?.value?.find(g => g.id === gameId);
 
   function renderInner() {
-    if(gamesLoading) {
-      return <Spinner style={{ margin: 'auto', height: '6rem', width: '6rem', borderWidth: '.15rem' }} animation='border' />;
+    if (gamesLoading) {
+      return (
+        <Spinner style={{ margin: 'auto', height: '6rem', width: '6rem', borderWidth: '.15rem' }} animation="border" />
+      );
     }
 
-    if(!game) {
+    if (!game) {
       return <h1>Game Not Found</h1>;
     }
 
@@ -280,9 +280,7 @@ export default function({ gameId }) {
 
   return (
     <Container fluid={true} style={{ height: '100%', paddingTop: '70px', paddingBottom: '15px' }}>
-      <Row style={{ height: '100%' }}>
-        {renderInner()}
-      </Row>
+      <Row style={{ height: '100%' }}>{renderInner()}</Row>
     </Container>
   );
 }

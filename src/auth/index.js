@@ -7,7 +7,7 @@ import { AppContext } from '../app/state';
 export function LoginLogout() {
   const state = useContext(AppContext);
 
-  if(state.user.loading) return null;
+  if (state.user.loading) return null;
   const loggedIn = !!state.user.value;
 
   return loggedIn ? <Logout /> : <Login />;
@@ -18,12 +18,12 @@ function Login() {
 
   const handleLoginGoogle = () => {
     state.user.login('google');
-  }
+  };
 
   return (
     <>
-      <button className='btn btn-block btn-social btn-google' onClick={handleLoginGoogle}>
-        <span className='fa fa-google'></span>
+      <button className="btn btn-block btn-social btn-google" onClick={handleLoginGoogle}>
+        <span className="fa fa-google"></span>
         Sign in with Google
       </button>
     </>
@@ -32,14 +32,14 @@ function Login() {
 
 function Logout() {
   const state = useContext(AppContext);
-  
+
   const handleLogout = () => {
     state.user.logout();
-  }
+  };
 
   return (
     <>
-      <Button variant='primary' onClick={handleLogout}>
+      <Button variant="primary" onClick={handleLogout}>
         Logout
       </Button>
     </>

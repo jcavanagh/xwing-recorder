@@ -20,7 +20,9 @@
     "build": "npm run extract && react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
-    "extract": "node scripts/extract-xwing-data.js"
+    "extract": "node scripts/extract-xwing-data.js",
+    "prettier": "prettier --write 'src/**/*.js'",
+    "prettier-check": "prettier --check 'src/**/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,6 +45,14 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "firebase-tools": "^7.11.0",
-    "fs-extra": "^8.1.0"
+    "fs-extra": "^8.1.0",
+    "husky": "^4.2.1",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

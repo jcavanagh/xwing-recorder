@@ -1,5 +1,3 @@
 import React from 'react';
 
-test('noop', () => {
-  
-});
+test('noop', () => {});

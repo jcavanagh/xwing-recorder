@@ -7,10 +7,6 @@ export class Squad {
   }
 }
 
-export class Ship {
+export class Ship {}
 
-}
-
-export class Upgrade {
-
-}
+export class Upgrade {}

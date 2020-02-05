@@ -8,44 +8,38 @@ export function useHover() {
   const handleMouseOver = () => setValue(true);
   const handleMouseOut = () => setValue(false);
 
-  useEffect(
-    () => {
-      const node = ref.current;
-      if (node) {
-        node.addEventListener('mouseover', handleMouseOver);
-        node.addEventListener('mouseout', handleMouseOut);
+  useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      node.addEventListener('mouseover', handleMouseOver);
+      node.addEventListener('mouseout', handleMouseOut);
 
-        return () => {
-          node.removeEventListener('mouseover', handleMouseOver);
-          node.removeEventListener('mouseout', handleMouseOut);
-        };
-      }
-    },
-    [ref.current]
-  );
+      return () => {
+        node.removeEventListener('mouseover', handleMouseOver);
+        node.removeEventListener('mouseout', handleMouseOut);
+      };
+    }
+  }, [ref.current]);
 
   return [ref, value];
 }
 
-export function useEventListener(eventName, handler, element = window){
+export function useEventListener(eventName, handler, element = window) {
   const savedHandler = useRef();
-  
+
   useEffect(() => {
     savedHandler.current = handler;
   }, [handler]);
 
-  useEffect(
-    () => {
-      const isSupported = element && element.addEventListener;
-      if (!isSupported) return;
+  useEffect(() => {
+    const isSupported = element && element.addEventListener;
+    if (!isSupported) return;
 
-      const eventListener = event => savedHandler.current(event);
-      element.addEventListener(eventName, eventListener);
-      
-      return () => {
-        element.removeEventListener(eventName, eventListener);
-      };
-    },
-    [eventName, element]
-  );
-};
+    const eventListener = event => savedHandler.current(event);
+    element.addEventListener(eventName, eventListener);
+
+    return () => {
+      element.removeEventListener(eventName, eventListener);
+    };
+  }, [eventName, element]);
+}

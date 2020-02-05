@@ -17,13 +17,15 @@ import { Chat } from '../chat';
 import { UserImage } from '../user';
 
 function UserWidget({ user }) {
-  if(!user) { return null; }
+  if (!user) {
+    return null;
+  }
 
   return (
     <Media style={{ border: '1px solid #CCC', borderRadius: '5px', background: '#EEE' }}>
       <UserImage user={user} />
       <Media.Body>
-        <span className='align-middle'>{user.displayName}</span>
+        <span className="align-middle">{user.displayName}</span>
       </Media.Body>
     </Media>
   );
@@ -51,18 +53,19 @@ function CreateGameModal({ createGame }) {
 
     setShow(false);
     navigate(`/game/${gameId}`);
-  }
+  };
 
   return (
     <>
-      {user?.value?.uid ?
-        <Button variant='primary' onClick={handleShow}>
+      {user?.value?.uid ? (
+        <Button variant="primary" onClick={handleShow}>
           New Game
-        </Button> :
-        <Button variant='primary' disabled>
+        </Button>
+      ) : (
+        <Button variant="primary" disabled>
           Login to Create a Game
         </Button>
-      }
+      )}
 
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
@@ -72,27 +75,22 @@ function CreateGameModal({ createGame }) {
         <Modal.Body>
           <Form>
             <Form.Group>
-              <Form.Control
-                type='text'
-                placeholder='Game Name'
-                value={name}
-                onChange={e => setName(e.target.value)}
-              />
+              <Form.Control type="text" placeholder="Game Name" value={name} onChange={e => setName(e.target.value)} />
             </Form.Group>
 
             <Form.Group>
               <Form.Control
-                type='text'
-                placeholder='Max Players'
+                type="text"
+                placeholder="Max Players"
                 value={maxPlayers}
                 onChange={e => setMaxPlayers(e.target.value)}
               />
             </Form.Group>
 
             <Form.Group>
-              <Form.Check 
-                type='checkbox'
-                label='Private Game'
+              <Form.Check
+                type="checkbox"
+                label="Private Game"
                 value={isPrivate}
                 onChange={e => setIsPrivate(e.target.value)}
               />
@@ -101,8 +99,12 @@ function CreateGameModal({ createGame }) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant='secondary' onClick={handleClose}>Close</Button>
-          <Button variant='primary' onClick={handleCreate}>Create Game</Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCreate}>
+            Create Game
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
@@ -113,7 +115,7 @@ function GameListItem({ game }) {
   const [hoverRef, isHovered] = useHover();
 
   const background = isHovered ? '#EEE' : 'none';
-  const cursor = isHovered ? 'pointer': 'default';
+  const cursor = isHovered ? 'pointer' : 'default';
 
   const playerCount = Object.keys(game.players ?? {}).length;
 
@@ -123,9 +125,10 @@ function GameListItem({ game }) {
       key={game.id}
       noGutters
       style={{ padding: '15px', border: '1px solid #CCC', borderRadius: '5px', background, cursor }}
-      onClick={() => navigate(`/game/${game.id}`)}>
+      onClick={() => navigate(`/game/${game.id}`)}
+    >
       <Col xs={8}>
-        <span >{game.name}</span>
+        <span>{game.name}</span>
       </Col>
       <Col xs={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         Players: {playerCount}/{game.maxPlayers}
@@ -139,15 +142,17 @@ function GameList({ games }) {
 }
 
 function UsersList({ users }) {
-  if(!users || !users.list) { return null; }
+  if (!users || !users.list) {
+    return null;
+  }
 
   return (
     <>
-      {users.list.map(user =>
+      {users.list.map(user => (
         <div key={user.uid}>
           <UserWidget user={user} />
         </div>
-      )}
+      ))}
     </>
   );
 }
@@ -157,11 +162,11 @@ function GamesPanel() {
 
   return (
     <div style={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
-      <Navbar bg='light' variant='light'>
+      <Navbar bg="light" variant="light">
         <Navbar.Brand>Games</Navbar.Brand>
         <Navbar.Collapse />
         <Form inline onSubmit={e => e.preventDefault()}>
-          <CreateGameModal createGame={state.games.create}/>
+          <CreateGameModal createGame={state.games.create} />
         </Form>
       </Navbar>
       <GameList games={state.games.value} />
@@ -174,7 +179,7 @@ function UsersPanel() {
 
   return (
     <>
-      <Navbar bg='light' variant='light'>
+      <Navbar bg="light" variant="light">
         <Navbar.Brand>Online Users</Navbar.Brand>
       </Navbar>
       <UsersList users={state.users} />
@@ -185,10 +190,10 @@ function UsersPanel() {
 function ChatPanel() {
   return (
     <div style={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
-      <Navbar bg='light' variant='light'>
+      <Navbar bg="light" variant="light">
         <Navbar.Brand>Lobby Chat</Navbar.Brand>
       </Navbar>
-      <Chat style={{ paddingTop: '56px' }}/>
+      <Chat style={{ paddingTop: '56px' }} />
     </div>
   );
 }
@@ -210,5 +215,5 @@ export default function Lobby() {
         </Col>
       </Row>
     </Container>
-  )
+  );
 }
