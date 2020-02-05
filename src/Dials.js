@@ -160,98 +160,13 @@ function parseXwsManeuvers(xwsManeuvers) {
     })
 }
 
-// to be used with var unique = a.filter(onlyUnique) where a is an array
-// function onlyUnique(value, index, self) { 
-//     return self.indexOf(value) === index;
-// }
-
-// // returns an  array of all  the unique bearings as they exist in an order defined by bearing_order
-// function getMBearings(maneuver_list) {
-//     var bearing_order = [
-//       "T",
-//       "B",
-//       "F",
-//       "N",
-//       "Y",
-//       "K",
-//       "L",
-//       "S",
-//       "E",
-//       "R",
-//       "O",
-//       "A",
-//       "P",
-//       "D"
-//     ]
-    
-//     var bearings = maneuver_list.map(x => x[1]).filter(onlyUnique);
-//     var inbearings = function(x) {
-//         return bearings.includes(x)
-//     }
-//     var bearings_list = bearing_order.filter(inbearings);
-//     return bearings_list;
-// }
-
-// // returns an array of all the unique speeds
-// function getMSpeeds(maneuver_list) {
-//     var speeds = maneuver_list.map(x => x[0]).filter(onlyUnique);
-//     return speeds
-// }
-
-
-// function MButton(props) {
-//     return (
-        
-//     );
-// }
-
+// Basic Dial Class
 class MDial extends React.Component {
-    // put in some state for now
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         maneuvers: ['3TR', '3BR', '3FR', '3NR', '3YR']
-    //     }
-    // }
-
-    // renderMButton(i) {
-    //     return (
-    //         <MButton
-    //             value={this.props.maneuvers[i]}
-    //             onClick={() =>  this.props.onClick(i)}
-    //         />
-    //     )
-    // }
-
-    // render() {
-    //     return (
-    //     <> 
-    //         <div>
-    //             <div className="mdial-row">
-    //                 {this.renderMButton(0)}
-    //                 {this.renderMButton(1)}
-    //                 {this.renderMButton(2)}
-    //                 {this.renderMButton(3)}
-    //                 {this.renderMButton(4)}
-    //             </div>
-    //             <div>
-    //                 haiyou blah
-    //             </div>
-    //         </div>
-    //     </>
-    //     );
-    // }
-
+    // function invoked when a maneuver button is rendered.
     renderButton(maneuverData) {
         const buttonSize = '35px';
         const border = '1px solid';
         const display = 'flex';
-        // added so I could debug
-        var mymdata = maneuverData;
-        // console.log(mymdata);
-        // console.log(maneuverData)
-        console.log(typeof(maneuverData))
-        console.log(maneuverData)
 
         if(maneuverData) {
             // Actual button
@@ -264,7 +179,6 @@ class MDial extends React.Component {
                 justifyContent: 'center',
                 alignItems: 'center'
             }
-            console.log(maneuverData.xws)
             return (
                 <div key={maneuverData.xws} onClick={() => this.props.onClick(maneuverData.xws)} style={style}>
                     <span>{renderManeuverSvg(maneuverData)}</span>
@@ -331,14 +245,6 @@ export class MDashboard extends React.Component {
     }
 
     handleClick(i) {
-        // this.setState({
-        //     setmaneuver: i
-        // })
-
-
-        // this.state.setmaneuver = i;
-        // return i
-        
         this.setState({
             setmaneuver: i
         })
@@ -354,7 +260,6 @@ export class MDashboard extends React.Component {
                         maneuvers={maneuvers}
                         onClick={(i) => this.handleClick(i)}
                     />
-                    {/* <p>hello</p> */}
                 </div>
                 <div className="test1">
                     <p>{this.state.setmaneuver}</p>
