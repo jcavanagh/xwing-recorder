@@ -3,6 +3,26 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import range from 'lodash/range';
+import get from 'lodash/get';
+
+// Guido's xwing database
+import data from './data';
+
+//import a squad test data set
+import test_squad1 from './xwing-recorder-squad-sample.json';
+
+
+
+
+const test_data = get(test_squad1, 'squad.faction');
+const test_ship = get(data, 'ships.asf01bwing');
+const test_ship_dial = get(data, 'ships.asf01bwing.dial');
+console.log(test_ship);
+console.log(test_ship_dial);
+console.log(test_data);
+console.log(test_squad1);
+
+// const imgSrc = get(data, xwsPath);
 
 // this is a maneuver button, e.g., 1 straight, 2  turn, 3 bank, 4-k etc..
 const test_dial = [
