@@ -1,0 +1,44 @@
+{"squad":{
+  "faction" : "rebelalliance",
+  "name" : "Lando + B’s",
+  "pilots" : [ {
+    "id" : "tennumb",
+    "points" : 67,
+    "ship" : "asf01bwing",
+    "upgrades" : {
+      "cannon" : [ "autoblasters", "jammingbeam" ],
+      "configuration" : [ "stabilizedsfoils" ],
+      "talent" : [ "crackshot" ],
+      "torpedo" : [ "protontorpedoes" ]
+    }
+  }, {
+    "id" : "braylenstramm",
+    "points" : 71,
+    "ship" : "asf01bwing",
+    "upgrades" : {
+      "cannon" : [ "autoblasters", "jammingbeam" ],
+      "configuration" : [ "stabilizedsfoils" ],
+      "talent" : [ "crackshot" ],
+      "torpedo" : [ "protontorpedoes" ]
+    }
+  }, {
+    "id" : "dutchvander",
+    "points" : 62,
+    "ship" : "btla4ywing",
+    "upgrades" : {
+      "gunner" : [ "veteranturretgunner" ],
+      "torpedo" : [ "plasmatorpedoes" ],
+      "turret" : [ "dorsalturret" ]
+    }
+  } ],
+  "points" : 200,
+  "vendor" : {
+    "yasb" : {
+      "builder" : "(Yet Another) X-Wing Miniatures Squad Builder",
+      "builder_url" : "https://raithos.github.io",
+      "link" : "https://raithos.github.io/?f=Rebel%20Alliance&d=v8ZsZ200Z74X116WW232W12W136WW313Y73X116WW232W12W136WW313Y27XW137W234WWWW90&sn=Lando%20%2B%20B%E2%80%99s&obs="
+    }
+  },
+  "version" : "2.0.0"
+}
+}
