@@ -7,4 +7,3 @@ export const damage_decks = data.damage_decks;
 export const factions = data.factions;
 export const ships = data.ships;
 export const stats = data.stats;
-

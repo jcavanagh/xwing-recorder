@@ -13,7 +13,7 @@ function GameStatus() {
   const state = useContext(AppContext);
 
   // Player names + factions, time left, total points destroyed, etc
-  return <Row></Row>;
+  return <Row />;
 }
 
 function SquadPanel() {}
