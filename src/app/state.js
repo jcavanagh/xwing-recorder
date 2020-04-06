@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import uuidv4 from 'uuid/v4';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useList, useObjectVal, useListVals } from 'react-firebase-hooks/database';
+import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
 
 // Global application state
 export const AppContext = React.createContext();

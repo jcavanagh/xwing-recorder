@@ -13,8 +13,7 @@ import 'firebase/database';
 import 'firebase/firestore';
 import 'firebase/functions';
 
-// import App from './App';
-import { MDashboard } from './Dials';
+import App from './App';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyD70wzmPf0nji-tlI5PMS2XniPCuf0D9BM',
@@ -27,5 +26,4 @@ firebase.initializeApp({
   measurementId: 'G-WH9BPRDX4K'
 });
 
-// ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<MDashboard />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
