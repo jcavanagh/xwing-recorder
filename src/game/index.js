@@ -216,7 +216,7 @@ function PreGamePanel({ game }) {
   const players = game.players ? Object.entries(game.players) : [];
 
   function canStart() {
-    const minPlayers = players.length > 1;
+    const minPlayers = players.length > 1 || game.maxPlayers == 1;
     const allSquads = players.every(p => p.squad);
 
     return minPlayers && allSquads;
