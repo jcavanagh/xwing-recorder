@@ -153,11 +153,13 @@ function PreGamePlayerPanel({ game, player }) {
               const pilotPath = `ships.${pilot.ship}.pilots.${pilot.id}`;
               const pilotXwsData = get(data, pilotPath);
               if (!pilotXwsData) {
-                return null;
+                return <React.Fragment key={`pilot-${index}`}>Missing Pilot: {pilotPath}</React.Fragment>;
               }
 
               // Collect all upgrades as list items
               let upgrades = [];
+              let totalShipCost = pilotXwsData.cost ?? 0;
+
               pilot.upgrades &&
                 Object.entries(pilot.upgrades).forEach(([upgradeType, upgradesOfType], index) => {
                   // XWS stores upgrades as type -> list of upgrades of that type
@@ -166,13 +168,16 @@ function PreGamePlayerPanel({ game, player }) {
                       const upgradePath = `upgrades.${upgradeType}.${upgrade}`;
                       const upgradeXwsData = get(data, upgradePath);
                       if (upgradeXwsData) {
+                        totalShipCost += upgradeXwsData.cost?.value ?? 0;
                         upgrades.push(
                           <li key={`upgrade-${index}-${subIndex}`}>
                             <XWSTooltip xwsPath={upgradePath}>
-                              {upgradeXwsData.name} ({upgradeXwsData.cost?.value})
+                              {upgradeXwsData.name} ({upgradeXwsData.cost?.value ?? '?'})
                             </XWSTooltip>
                           </li>
                         );
+                      } else {
+                        upgrades.push(<li key={`upgrade-${index}-${subIndex}`}>`(missing) ${upgradePath}`</li>);
                       }
                     });
                 });
@@ -181,7 +186,7 @@ function PreGamePlayerPanel({ game, player }) {
               return (
                 <React.Fragment key={`pilot-${index}`}>
                   <XWSTooltip xwsPath={pilotPath}>
-                    {pilotXwsData.name} ({pilotXwsData.cost})
+                    {pilotXwsData.name} ({pilotXwsData.cost ?? '?'}) [Total: {totalShipCost}]
                   </XWSTooltip>
                   <ul>{upgrades}</ul>
                 </React.Fragment>
