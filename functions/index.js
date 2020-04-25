@@ -8,7 +8,7 @@ exports.importYASB = functions.https.onCall((data, context) => {
   // For our usage, we can use https://github.com/zacharyp/yasb-xws
   // If that's dead or bad, people can just export XWS from YASB
   const rawYasbUrl = data.url;
-  const converterService = 'https://yasb2-xws.herokuapp.com';
+  const converterService = 'https://squad2xws.herokuapp.com';
   const yasbUrl = new Url(rawYasbUrl);
   return axios.get(`${converterService}/${yasbUrl.query}`)
     .then(r => {
