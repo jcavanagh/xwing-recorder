@@ -23,21 +23,20 @@ export function XWSTooltip({ children, xwsPath }) {
     }
 
     const imgSrc = get(data, xwsPath);
-    if (imgSrc) {
-      const sides = imgSrc.sides ? imgSrc.sides : [imgSrc];
-
-      return (
-        <div style={{ position: 'fixed', top: `${coords.y + 5}px`, left: `${coords.x + 5}px` }}>
-          {sides.map(side => {
-            return (
-              <img key={side.name || side.title} src={side.image} style={{ display: 'inline', maxWidth: '300px' }} />
-            );
-          })}
-        </div>
-      );
+    if (!imgSrc) {
+      return null;
     }
 
-    return null;
+    const sides = imgSrc.sides ? imgSrc.sides : [imgSrc];
+    return (
+      <div style={{ position: 'fixed', top: `${coords.y + 5}px`, left: `${coords.x + 5}px` }}>
+        {sides.map(side => {
+          return (
+            <img key={side.name || side.title} src={side.image} style={{ display: 'inline', maxWidth: '300px' }} />
+          );
+        })}
+      </div>
+    );
   }
 
   return (
