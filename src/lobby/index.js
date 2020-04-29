@@ -83,7 +83,7 @@ function CreateGameModal({ createGame }) {
                 type="text"
                 placeholder="Max Players"
                 value={maxPlayers}
-                onChange={e => setMaxPlayers(e.target.value)}
+                onChange={e => setMaxPlayers(parseInt(e.target.value))}
               />
             </Form.Group>
 
