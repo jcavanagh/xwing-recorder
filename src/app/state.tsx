@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
 
 // Global application state
-export const AppContext = React.createContext(null);
+export const AppContext = React.createContext({});
 
 // Auth providers
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
@@ -202,13 +202,12 @@ export default function(props: any) {
 
   return (
     <AppContext.Provider
-      // @ts-ignore
       value={{
-        user: { userState },
-        users: { usersState },
+        user: userState,
+        users: usersState,
         connected,
-        lobby: { lobbyState },
-        games: { gamesState },
+        lobby: lobbyState,
+        games: gamesState,
         // Separate bucket for local-only state
         local
       }}
