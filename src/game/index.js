@@ -10,21 +10,19 @@ import { XWSTooltip } from '../squad';
 import { UserImage } from '../user';
 
 function GameStatus() {
-  const state = useContext(AppContext);
-
   // Player names + factions, time left, total points destroyed, etc
   return <Row />;
 }
 
-function SquadPanel() {}
+// function SquadPanel() {}
 
-function PlanningPhasePanel() {}
+// function PlanningPhasePanel() {}
 
-function SystemPhasePanel() {}
+// function SystemPhasePanel() {}
 
-function ActivationPhasePanel() {}
+// function ActivationPhasePanel() {}
 
-function EngagementPhasePanel() {}
+// function EngagementPhasePanel() {}
 
 function InGamePanel() {
   return <GameStatus />;

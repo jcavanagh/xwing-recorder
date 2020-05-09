@@ -31,9 +31,8 @@ export function XWSTooltip({ children, xwsPath }) {
     return (
       <div style={{ position: 'fixed', top: `${coords.y + 5}px`, left: `${coords.x + 5}px` }}>
         {sides.map(side => {
-          return (
-            <img key={side.name || side.title} src={side.image} style={{ display: 'inline', maxWidth: '300px' }} />
-          );
+          const name = side.name || side.title;
+          return <img alt={name} key={name} src={side.image} style={{ display: 'inline', maxWidth: '300px' }} />;
         })}
       </div>
     );
