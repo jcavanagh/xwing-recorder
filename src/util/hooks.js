@@ -8,7 +8,7 @@ export function useHover() {
   const handleMouseOver = () => setValue(true);
   const handleMouseOut = () => setValue(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const node = ref.current;
     if (node) {
       node.addEventListener('mouseover', handleMouseOver);
@@ -19,7 +19,7 @@ export function useHover() {
         node.removeEventListener('mouseout', handleMouseOut);
       };
     }
-  }, [ref.current]);
+  });
 
   return [ref, value];
 }
