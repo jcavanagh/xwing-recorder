@@ -1,0 +1,5 @@
+{
+  "github": {
+    "event_name": "pull_request"
+  }
+}
