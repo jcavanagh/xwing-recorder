@@ -9,7 +9,7 @@
     "@types/uuid": "^7.0.3",
     "bootstrap": "^4.4.1",
     "bootstrap-social": "^5.1.1",
-    "firebase": "^7.6.1",
+    "firebase": "^7.14.3",
     "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
@@ -21,7 +21,7 @@
   "scripts": {
     "start": "npm run extract && react-scripts start",
     "build": "npm run extract && react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "firebase emulators:exec --only firestore,database,hosting \"react-scripts test --watchAll=false\"",
     "eject": "react-scripts eject",
     "extract": "node scripts/extract-xwing-data.js",
     "prettier": "prettier --write 'src/**/*.js'",
@@ -43,11 +43,12 @@
     ]
   },
   "devDependencies": {
+    "@firebase/testing": "^0.19.3",
     "@fortawesome/fontawesome-free": "^5.12.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
-    "firebase-tools": "^7.11.0",
+    "firebase-tools": "^7.16.2",
     "fs-extra": "^8.1.0",
     "husky": "^4.2.1",
     "prettier": "^1.19.1",
