@@ -7,8 +7,10 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
+import { useListVals } from 'react-firebase-hooks/database';
 
 import { useHover } from '../util/hooks';
+import { realtimeDatabase } from '../app/FirebaseUtil';
 
 function CreateGameModal({ user, createGame }) {
   // Modal state
@@ -114,7 +116,10 @@ function GameListItem({ game }) {
   );
 }
 
-function GameList({ games }) {
+function GameList() {
+  const gamesRef = realtimeDatabase().ref('games');
+  const [games, gamesLoading, gamesError] = useListVals(gamesRef);
+  console.log(games.length);
   return games?.map(game => <GameListItem game={game} />);
 }
 

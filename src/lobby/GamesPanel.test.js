@@ -1,6 +1,11 @@
 import React from 'react';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitForElement } from '@testing-library/react';
 import GamesPanel from '../lobby/GamesPanel';
+import { realtimeDatabase, setFirebaseInstance } from '../app/FirebaseUtil';
+import uuidv4 from 'uuid/v4';
+
+const firebase = require('@firebase/testing');
+setFirebaseInstance(firebase.initializeTestApp({ projectId: 'test-project', databaseName: 'my-database', auth: null }));
 
 describe('CreateGame only if logged in', () => {
   test('disabled if not logged in', () => {
@@ -21,4 +26,24 @@ describe('CreateGame only if logged in', () => {
   });
 });
 
-function CreateGame(id, players, name, maxPlayers) {}
+describe('GamesList Tests', () => {
+  beforeEach(async () => {
+    // TODO(hurwitz): Add a few games
+    const id = uuidv4();
+    await realtimeDatabase()
+      .ref('games')
+      .update({
+        [id]: {
+          id,
+          name: 'test_game',
+          timestamp: Date.now(),
+          maxPlayers: 2,
+          isPrivate: false
+        }
+      });
+  });
+  test('DisplaysAllGames', async () => {
+    const { getByText } = render(<GamesPanel user={null} games={[]} createGame={null} />);
+    await waitForElement(() => getByText('test_game'));
+  });
+});
