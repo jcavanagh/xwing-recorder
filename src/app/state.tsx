@@ -44,7 +44,6 @@ export default function(props: any) {
   const [user, userLoading, userError] = useAuthState(firebase.auth());
   const [users, usersLoading, usersError] = useListVals(presenceRef);
   const [connected] = useObjectVal(realtimeDatabase().ref('.info/connected'));
-  const [games, gamesLoading, gamesError] = useListVals(gamesRef);
   const [lobbyChat, lobbyChatLoading, lobbyChatError] = useListVals(lobbyChatRef);
 
   // Extracted state mutators
@@ -146,10 +145,6 @@ export default function(props: any) {
   };
 
   const gamesState = {
-    value: games ?? [],
-    loading: gamesLoading,
-    error: gamesError,
-
     create: (name: string, maxPlayers: number, isPrivate: boolean) => {
       // Generate an ID, return that
       const id = uuidv4();
