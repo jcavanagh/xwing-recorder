@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import firebase from 'firebase/app';
+import firebase from 'firebase';
 import uuidv4 from 'uuid/v4';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
