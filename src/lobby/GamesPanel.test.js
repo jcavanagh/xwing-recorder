@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitForElement } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitForElement } from '@testing-library/react';
 import GamesPanel from '../lobby/GamesPanel';
 import { realtimeDatabase, setFirebaseInstance } from '../app/FirebaseUtil';
 import uuidv4 from 'uuid/v4';
