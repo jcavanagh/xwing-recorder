@@ -76,7 +76,7 @@ export default function Lobby() {
     <Container fluid={true} style={{ height: '100%', paddingTop: '70px', paddingBottom: '15px' }}>
       <Row style={{ height: '100%' }}>
         <Col>
-          <GamesPanel user={state.user?.value?.uid} games={state.games.value} createGame={state.games.create} />
+          <GamesPanel user={state.user?.value?.uid} createGame={state.games.create} />
         </Col>
         <Col xs={4}>
           <ChatPanel />

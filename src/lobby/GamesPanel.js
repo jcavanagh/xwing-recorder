@@ -101,7 +101,6 @@ function GameListItem({ game }) {
   return (
     <Row
       ref={hoverRef}
-      key={game.id}
       noGutters
       style={{ padding: '15px', border: '1px solid #CCC', borderRadius: '5px', background, cursor }}
       onClick={() => navigate(`/game/${game.id}`)}
@@ -119,10 +118,10 @@ function GameListItem({ game }) {
 function GameList() {
   const gamesRef = realtimeDatabase().ref('games');
   const [games /*, gamesLoading, gamesError*/] = useListVals(gamesRef);
-  return games?.map(game => <GameListItem game={game} />);
+  return games?.map(game => <GameListItem key={game.id} game={game} />);
 }
 
-export default function GamesPanel({ user, games, createGame }) {
+export default function GamesPanel({ user, createGame }) {
   return (
     <div style={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
       <Navbar bg="light" variant="light">
@@ -132,7 +131,7 @@ export default function GamesPanel({ user, games, createGame }) {
           <CreateGameModal user={user} createGame={createGame} />
         </Form>
       </Navbar>
-      <GameList games={games} />
+      <GameList />
     </div>
   );
 }
