@@ -118,7 +118,7 @@ function GameListItem({ game }) {
 
 function GameList() {
   const gamesRef = realtimeDatabase().ref('games');
-  const [games, gamesLoading, gamesError] = useListVals(gamesRef);
+  const [games /*, gamesLoading, gamesError*/] = useListVals(gamesRef);
   return games?.map(game => <GameListItem game={game} />);
 }
 
