@@ -4,6 +4,7 @@ import uuidv4 from 'uuid/v4';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
+import { realtimeDatabase } from '../app/FirebaseUtil';
 
 // Global application state
 export const AppContext = React.createContext({});
@@ -35,15 +36,14 @@ const local = {};
 // A provider component for our application state, which injects context data via Firebase pub/sub
 export default function(props: any) {
   // Firebase refs
-  const gamesRef = firebase.database().ref('games');
-  const presenceRef = firebase.database().ref('presence');
-  const lobbyChatRef = firebase.database().ref('lobby/chat');
+  const gamesRef = realtimeDatabase().ref('games');
+  const presenceRef = realtimeDatabase().ref('presence');
+  const lobbyChatRef = realtimeDatabase().ref('lobby/chat');
 
   // State hooks
   const [user, userLoading, userError] = useAuthState(firebase.auth());
   const [users, usersLoading, usersError] = useListVals(presenceRef);
-  const [connected] = useObjectVal(firebase.database().ref('.info/connected'));
-  const [games, gamesLoading, gamesError] = useListVals(gamesRef);
+  const [connected] = useObjectVal(realtimeDatabase().ref('.info/connected'));
   const [lobbyChat, lobbyChatLoading, lobbyChatError] = useListVals(lobbyChatRef);
 
   // Extracted state mutators
@@ -145,10 +145,6 @@ export default function(props: any) {
   };
 
   const gamesState = {
-    value: games ?? [],
-    loading: gamesLoading,
-    error: gamesError,
-
     create: (name: string, maxPlayers: number, isPrivate: boolean) => {
       // Generate an ID, return that
       const id = uuidv4();
